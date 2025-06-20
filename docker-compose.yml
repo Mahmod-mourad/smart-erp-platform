@@ -1,0 +1,39 @@
+# NexaFlow local dev stack (T-007)
+#   - Azure SQL Edge: SQL Server engine that runs natively on Apple Silicon (M1/M2/M3)
+#   - Ollama: local LLM runtime for future AI features
+#
+# Usage:
+#   cp .env.example .env   # set SA_PASSWORD
+#   docker compose up -d
+#   docker compose exec ollama ollama pull llama3.1   # pull a model once
+
+services:
+  sqledge:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: nexaflow-sqledge
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${SA_PASSWORD:-Your_strong_Passw0rd}"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqledge-data:/var/opt/mssql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "exit 0"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: nexaflow-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  sqledge-data:
+  ollama-data:
