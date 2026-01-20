@@ -1,0 +1,102 @@
+<mat-toolbar color="primary" class="topbar">
+  <button mat-icon-button (click)="drawer.toggle()" aria-label="Toggle menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="brand">NexaFlow</span>
+  <span class="spacer"></span>
+
+  <button mat-button (click)="translation.toggleLanguage()">
+    <mat-icon>language</mat-icon>
+    <span>{{ translation.currentLanguage() === 'ar' ? 'English' : 'عربي' }}</span>
+  </button>
+
+  <button mat-icon-button (click)="toggleTheme()">
+    <mat-icon>{{ isDarkMode() ? 'dark_mode' : 'light_mode' }}</mat-icon>
+  </button>
+
+  <button mat-button [matMenuTriggerFor]="userMenu">
+    <mat-icon>account_circle</mat-icon>
+    <span class="user-name">{{ user()?.fullName }}</span>
+  </button>
+  <mat-menu #userMenu="matMenu">
+    <div class="menu-tenant">{{ user()?.email }}</div>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>{{ 'MENU.LOGOUT' | translate }}</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+
+<mat-sidenav-container class="layout">
+  <mat-sidenav #drawer [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile" class="sidebar">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active-link" (click)="isMobile ? drawer.close() : null">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>{{ 'MENU.DASHBOARD' | translate }}</span>
+      </a>
+      <a mat-list-item routerLink="/team" routerLinkActive="active-link" (click)="isMobile ? drawer.close() : null">
+        <mat-icon matListItemIcon>group</mat-icon>
+        <span matListItemTitle>Team</span>
+      </a>
+      <a mat-list-item routerLink="/branches" routerLinkActive="active-link" (click)="isMobile ? drawer.close() : null">
+        <mat-icon matListItemIcon>domain</mat-icon>
+        <span matListItemTitle>{{ 'MENU.BRANCHES' | translate }}</span>
+      </a>
+      <a mat-list-item routerLink="/crm" routerLinkActive="active-link"
+         [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon matListItemIcon>business_center</mat-icon>
+        <span matListItemTitle>CRM</span>
+      </a>
+      <a mat-list-item routerLink="/crm/pipeline" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>view_kanban</mat-icon>
+        <span matListItemTitle>Pipeline</span>
+      </a>
+      <a mat-list-item routerLink="/hr" routerLinkActive="active-link" (click)="isMobile ? drawer.close() : null">
+        <mat-icon matListItemIcon>badge</mat-icon>
+        <span matListItemTitle>{{ 'MENU.EMPLOYEES' | translate }}</span>
+      </a>
+      <a mat-list-item routerLink="/hr/leaves" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>event_available</mat-icon>
+        <span matListItemTitle>Leaves</span>
+      </a>
+      <a mat-list-item routerLink="/inventory" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>inventory_2</mat-icon>
+        <span matListItemTitle>Inventory</span>
+      </a>
+      <a mat-list-item routerLink="/automation" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>bolt</mat-icon>
+        <span matListItemTitle>Automation</span>
+      </a>
+      <a mat-list-item routerLink="/integrations" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>hub</mat-icon>
+        <span matListItemTitle>Integrations</span>
+      </a>
+      <a mat-list-item routerLink="/chart-of-accounts" routerLinkActive="active-link" (click)="isMobile ? drawer.close() : null">
+        <mat-icon matListItemIcon>account_balance</mat-icon>
+        <span matListItemTitle>{{ 'MENU.COA' | translate }}</span>
+      </a>
+      <a mat-list-item routerLink="/journals" routerLinkActive="active-link" (click)="isMobile ? drawer.close() : null">
+        <mat-icon matListItemIcon>receipt_long</mat-icon>
+        <span matListItemTitle>{{ 'MENU.JOURNALS' | translate }}</span>
+      </a>
+        <a mat-list-item routerLink="/branches" routerLinkActive="active" (click)="drawer.close()">
+          <mat-icon matListItemIcon>apartment</mat-icon>
+          <span matListItemTitle>{{ 'NAV.BRANCHES' | translate }}</span>
+        </a>
+        <a mat-list-item routerLink="/roles" routerLinkActive="active" (click)="drawer.close()">
+          <mat-icon matListItemIcon>security</mat-icon>
+          <span matListItemTitle>{{ 'NAV.ROLES' | translate }}</span>
+        </a>
+        <a mat-list-item routerLink="/backup" routerLinkActive="active" (click)="drawer.close()">
+          <mat-icon matListItemIcon>backup</mat-icon>
+          <span matListItemTitle>Backup & Restore</span>
+        </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<app-chat-widget />
