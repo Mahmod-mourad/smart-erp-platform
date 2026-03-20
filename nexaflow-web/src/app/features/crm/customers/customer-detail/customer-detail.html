@@ -1,0 +1,92 @@
+<div class="toolbar">
+  <button mat-icon-button (click)="back()" aria-label="Back to customers">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <h1>{{ customer()?.name ?? 'Customer' }}</h1>
+  <span class="spacer"></span>
+  @if (customer(); as c) {
+    <span class="badge" [class]="c.status.toLowerCase()">{{ c.status }}</span>
+    <button mat-stroked-button (click)="editCustomer()">
+      <mat-icon>edit</mat-icon> Edit
+    </button>
+  }
+</div>
+
+@if (isLoading()) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+
+@if (customer(); as c) {
+  <div class="layout">
+    <section class="panel info">
+      <h2>Profile</h2>
+      <dl>
+        <dt>Company</dt><dd>{{ c.company || '—' }}</dd>
+        <dt>Email</dt><dd>{{ c.email || '—' }}</dd>
+        <dt>Phone</dt><dd>{{ c.phone || '—' }}</dd>
+        <dt>Assigned to</dt><dd>{{ c.assignedToName || 'Unassigned' }}</dd>
+        <dt>Customer since</dt><dd>{{ c.createdAt | date: 'mediumDate' }}</dd>
+      </dl>
+
+      <h2>Leads ({{ leads().length }})</h2>
+      @if (leads().length === 0) {
+        <p class="muted">No leads for this customer yet.</p>
+      } @else {
+        <ul class="leads">
+          @for (l of leads(); track l.id) {
+            <li>
+              <span class="lead-title">{{ l.title }}</span>
+              <span class="lead-meta">
+                <span class="stage" [class]="l.stage.toLowerCase()">{{ l.stage }}</span>
+                {{ l.value | currency: 'EGP' }}
+              </span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="panel timeline">
+      <h2>Activity</h2>
+      <form [formGroup]="form" class="add-activity" (ngSubmit)="addActivity()">
+        <mat-form-field appearance="outline" class="type">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type">
+            @for (t of activityTypes; track t) {
+              <mat-option [value]="t">{{ t }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="content">
+          <mat-label>Log an activity…</mat-label>
+          <input matInput formControlName="content" />
+        </mat-form-field>
+        <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">Add</button>
+      </form>
+
+      @if (activities().length === 0) {
+        <p class="muted">No activity recorded yet.</p>
+      } @else {
+        <ol class="entries">
+          @for (a of activities(); track a.id) {
+            <li [class.system]="a.type === 'StatusChange'">
+              <mat-icon class="entry-icon">{{ icon(a.type) }}</mat-icon>
+              <div class="entry-body">
+                <p class="entry-content">{{ a.content }}</p>
+                <p class="entry-meta" [title]="a.createdAt | date: 'medium'">
+                  {{ a.createdByName || 'System' }} · {{ a.createdAt | relativeTime }}
+                </p>
+              </div>
+            </li>
+          }
+        </ol>
+      }
+    </section>
+  </div>
+} @else if (!isLoading()) {
+  <div class="empty-state">
+    <mat-icon>person_off</mat-icon>
+    <p>Customer not found.</p>
+    <a mat-stroked-button routerLink="/crm">Back to list</a>
+  </div>
+}

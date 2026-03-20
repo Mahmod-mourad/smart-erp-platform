@@ -1,0 +1,106 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h1 {
+    margin: 0;
+    font: var(--mat-sys-headline-small);
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    min-width: 220px;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.customer-table {
+  width: 100%;
+  border-collapse: collapse;
+  font: var(--mat-sys-body-medium);
+
+  th {
+    text-align: left;
+    padding: 8px 16px;
+    font: var(--mat-sys-label-medium);
+    color: var(--mat-sys-on-surface-variant);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    cursor: pointer;
+
+    &:hover {
+      background: var(--mat-sys-surface-container-high);
+    }
+  }
+
+  .num {
+    text-align: right;
+    width: 64px;
+  }
+
+  .actions {
+    width: 56px;
+    text-align: right;
+  }
+
+  .name {
+    display: block;
+    font: var(--mat-sys-title-small);
+  }
+
+  .assignee {
+    display: block;
+    font: var(--mat-sys-body-small);
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+
+    .muted {
+      color: var(--mat-sys-on-surface-variant);
+      font: var(--mat-sys-body-small);
+    }
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font: var(--mat-sys-label-small);
+
+  &.active { background: var(--mat-sys-tertiary-container); color: var(--mat-sys-on-tertiary-container); }
+  &.lead { background: var(--mat-sys-primary-container); color: var(--mat-sys-on-primary-container); }
+  &.inactive { background: var(--mat-sys-surface-container-highest); color: var(--mat-sys-on-surface-variant); }
+  &.churned { background: var(--mat-sys-error-container); color: var(--mat-sys-on-error-container); }
+}

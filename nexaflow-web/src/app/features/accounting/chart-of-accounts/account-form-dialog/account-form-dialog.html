@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>{{ 'ACCOUNTING.ADD_ACCOUNT' | translate }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'ACCOUNTING.CODE' | translate }}</mat-label>
+      <input matInput formControlName="code" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'ACCOUNTING.NAME' | translate }}</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'ACCOUNTING.TYPE' | translate }}</mat-label>
+      <mat-select formControlName="type">
+        @for (t of accountTypes; track t.value) {
+          <mat-option [value]="t.value">{{ t.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">{{ 'COMMON.SAVE' | translate }}</button>
+</mat-dialog-actions>

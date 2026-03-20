@@ -1,0 +1,98 @@
+<div class="page-header">
+  <h1>Customers</h1>
+  <div class="header-actions">
+    <button mat-flat-button color="primary" (click)="openCreate()">
+      <mat-icon>add</mat-icon>
+      New Customer
+    </button>
+    <button mat-stroked-button [matMenuTriggerFor]="exportMenu">
+      <mat-icon>download</mat-icon>
+      Export
+    </button>
+    <mat-menu #exportMenu="matMenu">
+      <button mat-menu-item (click)="exportData('csv')">CSV</button>
+      <button mat-menu-item (click)="exportData('excel')">Excel</button>
+    </mat-menu>
+  </div>
+</div>
+
+<div class="filters">
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input matInput placeholder="Name, email or company" (input)="onSearch($any($event.target).value)" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Status</mat-label>
+    <mat-select [value]="crmState.statusFilter()" (selectionChange)="onFilterChange($event.value)">
+      @for (status of statuses; track status) {
+        <mat-option [value]="status">{{ status === 'all' ? 'All' : status }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</div>
+
+@if (crmState.isLoading()) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+
+@if (!crmState.isLoading() && customers().length === 0) {
+  <div class="empty-state">
+    <mat-icon>group_off</mat-icon>
+    <p>No customers match your filters.</p>
+  </div>
+} @else {
+  <table class="customer-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Contact</th>
+        <th>Status</th>
+        <th class="num">Leads</th>
+        <th class="actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (c of customers(); track c.id) {
+        <tr (click)="openDetail(c.id)">
+          <td>
+            <span class="name">{{ c.name }}</span>
+            @if (c.assignedToName) {
+              <span class="assignee">{{ c.assignedToName }}</span>
+            }
+          </td>
+          <td>{{ c.company || '—' }}</td>
+          <td class="contact">
+            @if (c.email) { <span>{{ c.email }}</span> }
+            @if (c.phone) { <span class="muted">{{ c.phone }}</span> }
+            @if (!c.email && !c.phone) { <span>—</span> }
+          </td>
+          <td>
+            <span class="badge" [class]="c.status.toLowerCase()">{{ c.status }}</span>
+          </td>
+          <td class="num">{{ c.leadsCount }}</td>
+          <td class="actions">
+            <button
+              mat-icon-button
+              aria-label="Customer actions"
+              [matMenuTriggerFor]="menu"
+              (click)="$event.stopPropagation()"
+            >
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="openEdit(c)">
+                <mat-icon>edit</mat-icon> Edit
+              </button>
+              <button mat-menu-item (click)="confirmDelete(c)">
+                <mat-icon>delete</mat-icon> Delete
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

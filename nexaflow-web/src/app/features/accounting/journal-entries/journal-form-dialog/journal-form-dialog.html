@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>{{ 'ACCOUNTING.ADD_JOURNAL' | translate }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <div style="display: flex; gap: 10px;">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'ACCOUNTING.REF_NUMBER' | translate }}</mat-label>
+        <input matInput formControlName="referenceNumber" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'ACCOUNTING.DATE' | translate }}</mat-label>
+        <input matInput type="date" formControlName="date" />
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'ACCOUNTING.DESCRIPTION' | translate }}</mat-label>
+      <input matInput formControlName="description" />
+    </mat-form-field>
+
+    <h3>{{ 'ACCOUNTING.LINES' | translate }}</h3>
+    <div formArrayName="lines">
+      @for (line of lines.controls; track $index) {
+        <div [formGroupName]="$index" class="line-row">
+          <mat-form-field appearance="outline" style="flex: 2">
+            <mat-label>{{ 'ACCOUNTING.ACCOUNT' | translate }}</mat-label>
+            <mat-select formControlName="accountId">
+              @for (acc of accountingService.accounts(); track acc.id) {
+                <mat-option [value]="acc.id">{{ acc.code }} - {{ acc.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" style="flex: 1">
+            <mat-label>{{ 'ACCOUNTING.DEBIT' | translate }}</mat-label>
+            <input matInput type="number" formControlName="debit" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" style="flex: 1">
+            <mat-label>{{ 'ACCOUNTING.CREDIT' | translate }}</mat-label>
+            <input matInput type="number" formControlName="credit" />
+          </mat-form-field>
+
+          <button mat-icon-button color="warn" (click)="removeLine($index)">
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+    
+    <button mat-button type="button" (click)="addLine()">
+      <mat-icon>add</mat-icon> {{ 'ACCOUNTING.ADD_LINE' | translate }}
+    </button>
+
+    <div class="total-row">
+      <span>{{ 'ACCOUNTING.TOTAL_DEBIT' | translate }}: {{ totalDebit | currency }}</span>
+      <span>{{ 'ACCOUNTING.TOTAL_CREDIT' | translate }}: {{ totalCredit | currency }}</span>
+    </div>
+    <div class="error" *ngIf="!isBalanced && form.touched">
+      {{ 'ACCOUNTING.NOT_BALANCED' | translate }}
+    </div>
+
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid || !isBalanced" (click)="save()">{{ 'COMMON.SAVE' | translate }}</button>
+</mat-dialog-actions>
