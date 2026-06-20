@@ -93,6 +93,7 @@ jobs:
       - name: Apply EF Core migrations
         run: |
           dotnet tool restore --tool-manifest dotnet-tools.json
+          dotnet restore NexaFlow.slnx
           dotnet ef database update \
             --project NexaFlow.Infrastructure \
             --startup-project NexaFlow.API
