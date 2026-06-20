@@ -1,0 +1,46 @@
+<div class="auth-wrapper">
+  <mat-card class="auth-card">
+    @if (loading()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+    <mat-card-header>
+      <mat-card-title>Join your team</mat-card-title>
+      <mat-card-subtitle>Finish setting up your NexaFlow account</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (error()) {
+        <div class="auth-error">{{ error() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="firstName" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="lastName" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" autocomplete="new-password" />
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <mat-error>Password must be at least 8 characters.</mat-error>
+          }
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="full" type="submit" [disabled]="loading()">
+          Accept invitation
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="switch">
+      <a mat-button routerLink="/login">Back to sign in</a>
+    </mat-card-actions>
+  </mat-card>
+</div>

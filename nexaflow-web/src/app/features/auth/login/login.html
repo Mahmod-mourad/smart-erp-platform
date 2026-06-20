@@ -1,0 +1,44 @@
+<div class="auth-wrapper">
+  <mat-card class="auth-card">
+    @if (loading()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+    <mat-card-header>
+      <mat-card-title>Welcome back</mat-card-title>
+      <mat-card-subtitle>Sign in to your NexaFlow workspace</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (error()) {
+        <div class="auth-error">{{ error() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" autocomplete="email" />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <mat-error>Enter a valid email address.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" autocomplete="current-password" />
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <mat-error>Password is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="full" type="submit" [disabled]="loading()">
+          Sign in
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="switch">
+      <span>New here?</span>
+      <a mat-button routerLink="/register">Create a company</a>
+    </mat-card-actions>
+  </mat-card>
+</div>

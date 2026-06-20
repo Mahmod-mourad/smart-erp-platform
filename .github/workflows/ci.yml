@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  build-and-test:
+    name: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore NexaFlow.slnx
+
+      - name: Build
+        run: dotnet build NexaFlow.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test NexaFlow.slnx --no-build --configuration Release --verbosity normal
+
+  frontend:
+    name: frontend-build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nexaflow-web
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Skip if frontend not present
+        id: check
+        run: |
+          if [ -f package.json ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Setup Node
+        if: steps.check.outputs.exists == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: nexaflow-web/package-lock.json
+
+      - name: Install
+        if: steps.check.outputs.exists == 'true'
+        run: npm ci
+
+      - name: Build
+        if: steps.check.outputs.exists == 'true'
+        run: npm run build -- --configuration production

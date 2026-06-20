@@ -1,0 +1,30 @@
+.page-head {
+  margin-bottom: 24px;
+  h1 { margin: 0 0 4px; font-size: 26px; }
+  p { margin: 0; color: rgba(0, 0, 0, 0.6); }
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.invite-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  mat-form-field { width: 100%; }
+  button { height: 44px; }
+}
+
+.empty {
+  color: rgba(0, 0, 0, 0.5);
+  padding: 8px 0;
+}
+
+@media (max-width: 800px) {
+  .team-grid { grid-template-columns: 1fr; }
+}

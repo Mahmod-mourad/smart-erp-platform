@@ -1,0 +1,35 @@
+<div class="header">
+  <h2>{{ 'ROLES.TITLE' | translate }}</h2>
+  <button mat-raised-button color="primary" (click)="openDialog()">
+    <mat-icon>add</mat-icon>
+    {{ 'ROLES.ADD' | translate }}
+  </button>
+</div>
+
+<table mat-table [dataSource]="roleService.roles()" class="mat-elevation-z2">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>{{ 'ROLES.NAME' | translate }}</th>
+    <td mat-cell *matCellDef="let r">{{ r.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>{{ 'ROLES.DESCRIPTION' | translate }}</th>
+    <td mat-cell *matCellDef="let r">{{ r.description }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="permissionsCount">
+    <th mat-header-cell *matHeaderCellDef>{{ 'ROLES.PERMISSIONS' | translate }}</th>
+    <td mat-cell *matCellDef="let r">{{ r.permissions?.length || 0 }} {{ 'ROLES.PERMISSIONS_COUNT' | translate }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let r">
+      <button mat-icon-button color="primary" (click)="openDialog(r)"><mat-icon>edit</mat-icon></button>
+      <button mat-icon-button color="warn" (click)="deleteRole(r.id)"><mat-icon>delete</mat-icon></button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

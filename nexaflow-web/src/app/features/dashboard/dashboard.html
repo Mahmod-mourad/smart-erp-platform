@@ -1,0 +1,22 @@
+<header class="page-head">
+  <h1>Welcome, {{ user()?.firstName }} 👋</h1>
+  <p>Here's a quick overview of your workspace.</p>
+</header>
+
+@if (isLoading()) {
+  <div class="state"><mat-spinner diameter="40" /></div>
+} @else if (error()) {
+  <div class="state state--error">{{ error() }}</div>
+} @else if (summary(); as s) {
+  <section class="kpis">
+    @for (kpi of kpis(); track kpi.label) {
+      <app-kpi-card [kpi]="kpi" />
+    }
+  </section>
+
+  <section class="grid">
+    <app-sales-forecast-chart class="grid__wide" [forecast]="s.salesForecast" />
+    <app-churn-risk-list [risks]="s.highChurnRisk" />
+    <app-stock-alerts-widget [alerts]="s.stockAlerts" />
+  </section>
+}

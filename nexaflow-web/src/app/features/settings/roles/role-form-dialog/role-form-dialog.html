@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>{{ data ? ('ROLES.EDIT' | translate) : ('ROLES.ADD' | translate) }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'ROLES.NAME' | translate }}</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'ROLES.DESCRIPTION' | translate }}</mat-label>
+      <input matInput formControlName="description" />
+    </mat-form-field>
+
+    <h3>{{ 'ROLES.PERMISSIONS' | translate }}</h3>
+    <div class="permissions-grid">
+      @for (perm of roleService.permissionsList(); track perm) {
+        <mat-checkbox 
+          [checked]="selectedPermissions.has(perm)"
+          (change)="togglePermission(perm, $event.checked)">
+          {{ perm }}
+        </mat-checkbox>
+      }
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
+  <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="save()">{{ 'COMMON.SAVE' | translate }}</button>
+</mat-dialog-actions>

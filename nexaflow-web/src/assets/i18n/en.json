@@ -1,0 +1,61 @@
+{
+  "COMMON": {
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "DELETE": "Delete",
+    "EDIT": "Edit",
+    "ADD": "Add",
+    "ACTIONS": "Actions"
+  },
+  "MENU": {
+    "DASHBOARD": "Dashboard",
+    "EMPLOYEES": "Employees",
+    "BRANCHES": "Branches",
+    "SETTINGS": "Settings",
+    "LANGUAGE": "Language",
+    "ROLES": "Roles & Permissions",
+    "COA": "Chart of Accounts",
+    "JOURNALS": "Journal Entries",
+    "LOGOUT": "Logout"
+  },
+  "BRANCHES": {
+    "TITLE": "Branches",
+    "ADD_BRANCH": "Add Branch",
+    "EDIT_BRANCH": "Edit Branch",
+    "NAME": "Name",
+    "CITY": "City",
+    "PHONE": "Phone",
+    "IS_HEADQUARTERS": "Headquarters"
+  },
+  "ROLES": {
+    "TITLE": "Roles & Permissions",
+    "ADD": "Add Role",
+    "EDIT": "Edit Role",
+    "NAME": "Role Name",
+    "DESCRIPTION": "Description",
+    "PERMISSIONS": "Permissions",
+    "PERMISSIONS_COUNT": "Permissions"
+  },
+  "ACCOUNTING": {
+    "COA_TITLE": "Chart of Accounts",
+    "ADD_ACCOUNT": "Add Account",
+    "CODE": "Account Code",
+    "NAME": "Account Name",
+    "TYPE": "Type",
+    "BALANCE": "Balance",
+    "JOURNALS_TITLE": "Journal Entries",
+    "ADD_JOURNAL": "Post Journal Entry",
+    "REF_NUMBER": "Reference Number",
+    "DATE": "Date",
+    "DESCRIPTION": "Description",
+    "STATUS": "Status",
+    "LINES": "Entry Lines",
+    "ACCOUNT": "Account",
+    "DEBIT": "Debit",
+    "CREDIT": "Credit",
+    "ADD_LINE": "Add Line",
+    "TOTAL_DEBIT": "Total Debit",
+    "TOTAL_CREDIT": "Total Credit",
+    "NOT_BALANCED": "Journal entry must be balanced (Total Debit = Total Credit)."
+  }
+}

@@ -1,0 +1,89 @@
+<div class="page-container">
+  <div class="header">
+    <h1>{{ 'BRANCHES.TITLE' | translate }}</h1>
+  </div>
+
+  <div class="content-grid">
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>
+          {{ (isEditing ? 'BRANCHES.EDIT_BRANCH' : 'BRANCHES.ADD_BRANCH') | translate }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="save()" class="branch-form">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'BRANCHES.NAME' | translate }}</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'BRANCHES.CITY' | translate }}</mat-label>
+            <input matInput formControlName="city" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'BRANCHES.PHONE' | translate }}</mat-label>
+            <input matInput formControlName="phone" />
+          </mat-form-field>
+
+          <mat-checkbox formControlName="isHeadquarters" color="primary">
+            {{ 'BRANCHES.IS_HEADQUARTERS' | translate }}
+          </mat-checkbox>
+
+          <div class="actions">
+            <button mat-button type="button" (click)="reset()" *ngIf="isEditing">
+              {{ 'COMMON.CANCEL' | translate }}
+            </button>
+            <button mat-flat-button color="primary" type="submit">
+              {{ 'COMMON.SAVE' | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="table-card">
+      <mat-card-content class="table-responsive">
+        <table mat-table [dataSource]="branchService.branches()">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>{{ 'BRANCHES.NAME' | translate }}</th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="city">
+            <th mat-header-cell *matHeaderCellDef>{{ 'BRANCHES.CITY' | translate }}</th>
+            <td mat-cell *matCellDef="let element">{{ element.city }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>{{ 'BRANCHES.PHONE' | translate }}</th>
+            <td mat-cell *matCellDef="let element">{{ element.phone }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="isHeadquarters">
+            <th mat-header-cell *matHeaderCellDef>{{ 'BRANCHES.IS_HEADQUARTERS' | translate }}</th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon *ngIf="element.isHeadquarters" color="primary">star</mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{ 'COMMON.ACTIONS' | translate }}</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="primary" (click)="edit(element)" title="{{ 'COMMON.EDIT' | translate }}">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="delete(element)" title="{{ 'COMMON.DELETE' | translate }}">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

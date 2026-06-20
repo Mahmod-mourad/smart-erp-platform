@@ -1,0 +1,35 @@
+<div class="backup-container">
+  <h1>Enterprise Backup & Restore</h1>
+  <p class="text-secondary">Manage cold storage backups for your tenant data.</p>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Create Full Backup</mat-card-title>
+      <mat-card-subtitle>Generates a JSON archive of all critical business data.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="action-row">
+        <button mat-flat-button color="primary" (click)="createBackup()" [disabled]="isCreating">
+          <mat-icon>cloud_download</mat-icon>
+          {{ isCreating ? 'Creating Backup...' : 'Generate Archive' }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Restore Backup</mat-card-title>
+      <mat-card-subtitle>Restore business data from a previously downloaded JSON archive. Existing records will be skipped.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="action-row">
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".json" style="display: none;">
+        <button mat-flat-button color="accent" (click)="fileInput.click()" [disabled]="isRestoring">
+          <mat-icon>cloud_upload</mat-icon>
+          {{ isRestoring ? 'Restoring...' : 'Upload Archive' }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,12 @@
+# Default owners for everything in the repo
+*                           @Mahmod-mourad
+
+# Backend
+/NexaFlow.API/              @Mahmod-mourad
+/NexaFlow.Core/             @Mahmod-mourad
+/NexaFlow.Application/      @Mahmod-mourad
+/NexaFlow.Infrastructure/   @Mahmod-mourad
+
+# CI / DevOps
+/.github/                   @Mahmod-mourad
+/docker-compose.yml         @Mahmod-mourad

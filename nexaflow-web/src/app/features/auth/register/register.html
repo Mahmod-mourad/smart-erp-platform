@@ -1,0 +1,64 @@
+<div class="auth-wrapper">
+  <mat-card class="auth-card">
+    @if (loading()) {
+      <mat-progress-bar mode="indeterminate" />
+    }
+    <mat-card-header>
+      <mat-card-title>Create your company</mat-card-title>
+      <mat-card-subtitle>Start your NexaFlow workspace in seconds</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (error()) {
+        <div class="auth-error">{{ error() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Company name</mat-label>
+          <input matInput formControlName="companyName" />
+          @if (form.controls.companyName.touched && form.controls.companyName.invalid) {
+            <mat-error>Company name is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>First name</mat-label>
+            <input matInput formControlName="adminFirstName" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="adminLastName" />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Work email</mat-label>
+          <input matInput type="email" formControlName="adminEmail" autocomplete="email" />
+          @if (form.controls.adminEmail.touched && form.controls.adminEmail.invalid) {
+            <mat-error>Enter a valid email address.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" autocomplete="new-password" />
+          <mat-hint>At least 8 chars with upper, lower & a digit.</mat-hint>
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <mat-error>Password must be at least 8 characters.</mat-error>
+          }
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="full" type="submit" [disabled]="loading()">
+          Create company
+        </button>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="switch">
+      <span>Already have an account?</span>
+      <a mat-button routerLink="/login">Sign in</a>
+    </mat-card-actions>
+  </mat-card>
+</div>

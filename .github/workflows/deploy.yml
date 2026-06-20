@@ -1,0 +1,128 @@
+name: Deploy
+
+# Builds and deploys NexaFlow on every push to main. Requires these repo secrets:
+#   AZURE_WEBAPP_PUBLISH_PROFILE  – API → Azure App Service publish profile (XML)
+#   AZURE_STATIC_WEB_APPS_TOKEN   – Angular → Azure Static Web Apps deployment token
+#   PROD_DB_CONNECTION            – SQL connection string for the EF Core migration step
+# See docs/AZURE_SETUP.md for how to provision the resources and obtain these values.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  NODE_VERSION: '20'
+  AZURE_WEBAPP_NAME: nexaflow-api
+
+jobs:
+  # ── Backend: build, test, publish ─────────────────────────────────────────
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore NexaFlow.slnx
+
+      - name: Build
+        run: dotnet build NexaFlow.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test NexaFlow.slnx --no-build --configuration Release --verbosity normal
+
+      - name: Publish API
+        run: dotnet publish NexaFlow.API/NexaFlow.API.csproj --configuration Release --output ./publish
+
+      - name: Upload API artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api
+          path: ./publish
+
+  # ── Frontend: build production bundle ─────────────────────────────────────
+  build-web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: nexaflow-web
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: nexaflow-web/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build -- --configuration production
+
+      - name: Upload web artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: nexaflow-web/dist/nexaflow-web/browser
+
+  # ── Deploy (main only) ────────────────────────────────────────────────────
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build-api, build-web]
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Apply EF Core migrations
+        run: |
+          dotnet tool restore --tool-manifest dotnet-tools.json
+          dotnet ef database update \
+            --project NexaFlow.Infrastructure \
+            --startup-project NexaFlow.API
+        env:
+          ConnectionStrings__Default: ${{ secrets.PROD_DB_CONNECTION }}
+
+      - name: Download API artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: api
+          path: ./api
+
+      - name: Deploy API to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./api
+
+      - name: Download web artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web
+          path: ./web
+
+      - name: Deploy Angular to Azure Static Web Apps
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_TOKEN }}
+          action: upload
+          app_location: ./web
+          skip_app_build: true
+          skip_api_build: true

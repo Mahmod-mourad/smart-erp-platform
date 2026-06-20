@@ -1,0 +1,61 @@
+{
+  "COMMON": {
+    "SAVE": "حفظ",
+    "CANCEL": "إلغاء",
+    "DELETE": "حذف",
+    "EDIT": "تعديل",
+    "ADD": "إضافة",
+    "ACTIONS": "إجراءات"
+  },
+  "MENU": {
+    "DASHBOARD": "لوحة القيادة",
+    "EMPLOYEES": "الموظفين",
+    "BRANCHES": "الفروع",
+    "SETTINGS": "الإعدادات",
+    "LANGUAGE": "اللغة",
+    "ROLES": "الصلاحيات",
+    "COA": "شجرة الحسابات",
+    "JOURNALS": "القيود اليومية",
+    "LOGOUT": "تسجيل الخروج"
+  },
+  "BRANCHES": {
+    "TITLE": "الفروع",
+    "ADD_BRANCH": "إضافة فرع",
+    "EDIT_BRANCH": "تعديل فرع",
+    "NAME": "الاسم",
+    "CITY": "المدينة",
+    "PHONE": "الهاتف",
+    "IS_HEADQUARTERS": "المقر الرئيسي"
+  },
+  "ROLES": {
+    "TITLE": "الصلاحيات والأدوار",
+    "ADD": "إضافة دور",
+    "EDIT": "تعديل الدور",
+    "NAME": "اسم الدور",
+    "DESCRIPTION": "الوصف",
+    "PERMISSIONS": "الصلاحيات",
+    "PERMISSIONS_COUNT": "صلاحية"
+  },
+  "ACCOUNTING": {
+    "COA_TITLE": "شجرة الحسابات",
+    "ADD_ACCOUNT": "إضافة حساب",
+    "CODE": "كود الحساب",
+    "NAME": "اسم الحساب",
+    "TYPE": "النوع",
+    "BALANCE": "الرصيد",
+    "JOURNALS_TITLE": "القيود اليومية",
+    "ADD_JOURNAL": "إضافة قيد يومية",
+    "REF_NUMBER": "الرقم المرجعي",
+    "DATE": "التاريخ",
+    "DESCRIPTION": "البيان",
+    "STATUS": "الحالة",
+    "LINES": "بنود القيد",
+    "ACCOUNT": "الحساب",
+    "DEBIT": "مدين",
+    "CREDIT": "دائن",
+    "ADD_LINE": "إضافة بند",
+    "TOTAL_DEBIT": "إجمالي المدين",
+    "TOTAL_CREDIT": "إجمالي الدائن",
+    "NOT_BALANCED": "يجب أن يكون القيد متزناً (إجمالي المدين = إجمالي الدائن)."
+  }
+}
